@@ -52,18 +52,34 @@ let c = canvas.getContext('2d');
 // Moving circle
 //
 
-let x = 00;
+let x = 200;
 let y = 200;
+let dx = 4;
+let dy = 4;
+let radius = 30;
 function animate() {
     //calls itself to create a loop
     requestAnimationFrame(animate);
     //clears the canvas everytime it gets called
     c.clearRect(0, 0, innerWidth, innerHeight);
     c.beginPath();
-    c.arc(x, 200, 30, 0, Math.PI * 2, false)
+    c.arc(x, y, radius, 0, Math.PI * 2, false)
     c.strokeStyle = 'black'
     c.stroke();
     //incriments the circle by one and moves to the right
-    x += 1;
+    //i need to write a conditional to make it bounce back from the right
+    //once our x value is = to the inner width of the screen change the dx value to a negative value
+    //make sure the edge of the circle is bouncing of the edge not the center
+    if (x + radius > innerWidth || x - radius < 0) {
+        dx = -dx;
+
+    }
+    if (y + radius > innerHeight || y - radius < 0) {
+        dy = -dy;
+
+    }
+
+    x += dx;
+    y += dy;
 };
 animate()

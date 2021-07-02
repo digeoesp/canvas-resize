@@ -51,35 +51,61 @@ let c = canvas.getContext('2d');
 ////////////////
 // Moving circle
 //
+// let x = Math.random() * innerWidth;
+// let y = Math.random() * innerHeight;
+// let dx = (Math.random() - 0.5) * 30;
+// let dy = (Math.random() - 0.5) * 30;
+// let radius = 30;
+function Circle(x, y, dx, dy, radius) {
+    this.x = x;
+    this.y = y;
+    this.dx = dx;
+    this.dy = dy;
+    this.radius = radius
+    this.draw = function () {
+        c.beginPath();
+        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+        c.strokeStyle = 'black'
+        c.stroke();
 
-let x = 200;
-let y = 200;
-let dx = 4;
-let dy = 4;
-let radius = 30;
+    }
+    this.update = function () {
+        if (this.x + this.radius > innerWidth || this.x - this.radius < 0) {
+            this.dx = -this.dx;
+
+        }
+        if (this.y + this.radius > innerHeight || this.y - this.radius < 0) {
+            this.dy = -this.dy;
+
+        }
+
+        this.x += this.dx;
+        this.y += this.dy;
+        this.draw();
+
+    }
+}
+let circleArray = [];
+
+for (let i = 0; i < 10; i++) {
+    let radius = 30;
+    let x = Math.random() * (innerWidth - radius * 2) + radius;
+    let y = Math.random() * (innerHeight - radius * 2) + radius;
+    let dx = (Math.random() - 0.5) * 30;
+    let dy = (Math.random() - 0.5) * 30;
+    circleArray.push(new Circle(x, y, dx, dy, radius));
+}
+
+
+
 function animate() {
     //calls itself to create a loop
     requestAnimationFrame(animate);
     //clears the canvas everytime it gets called
     c.clearRect(0, 0, innerWidth, innerHeight);
-    c.beginPath();
-    c.arc(x, y, radius, 0, Math.PI * 2, false)
-    c.strokeStyle = 'black'
-    c.stroke();
-    //incriments the circle by one and moves to the right
-    //i need to write a conditional to make it bounce back from the right
-    //once our x value is = to the inner width of the screen change the dx value to a negative value
-    //make sure the edge of the circle is bouncing of the edge not the center
-    if (x + radius > innerWidth || x - radius < 0) {
-        dx = -dx;
-
-    }
-    if (y + radius > innerHeight || y - radius < 0) {
-        dy = -dy;
-
+    for (let i = 0; i < circleArray.length; i++) {
+        circleArray[i].update();
     }
 
-    x += dx;
-    y += dy;
 };
 animate()

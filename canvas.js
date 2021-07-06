@@ -63,25 +63,32 @@ let mouse = {
 let maxRadius = 40;
 let minRadius = 2;
 
+let colorArray = [
+    '#E6AD47',
+    '#997EF0',
+    '#7BD938',
+    '#F03E32',
+    '#30CDE6',
+]
 window.addEventListener('mousemove', function (e) {
     mouse.x = e.x;
     mouse.y = e.y;
     console.log(mouse)
 })
-let colorArray = [
-    '#ffaa33',
-    '#99ffaaa',
-    '#00ff00',
-    '#4411aa',
-    '#ff1100',
-]
+window.addEventListener('resize', function () {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    init();
+
+});
 
 function Circle(x, y, dx, dy, radius) {
     this.x = x;
     this.y = y;
     this.dx = dx;
     this.dy = dy;
-    this.radius = radius
+    this.radius = radius;
+    this.minRadius = radius;
     this.color = colorArray[Math.floor(Math.random() * colorArray.length)];
 
     this.draw = function () {
@@ -111,7 +118,7 @@ function Circle(x, y, dx, dy, radius) {
             if (this.radius < maxRadius) {
                 this.radius += 1;
             }
-        } else if (this.radius > minRadius) {
+        } else if (this.radius > this.minRadius) {
             this.radius -= 1;
         }
 
@@ -120,18 +127,22 @@ function Circle(x, y, dx, dy, radius) {
 
     }
 }
+
 let circleArray = [];
 
-for (let i = 0; i < 1000; i++) {
-    let radius = 30;
-    let x = Math.random() * (innerWidth - radius * 2) + radius;
-    let y = Math.random() * (innerHeight - radius * 2) + radius;
-    let dx = (Math.random() - 0.5) * 5;
-    let dy = (Math.random() - 0.5) * 5;
-    circleArray.push(new Circle(x, y, dx, dy, radius));
+function init() {
+
+    circleArray = [];
+    for (let i = 0; i < 1000; i++) {
+        let radius = Math.random() * 8 + 1;
+        let x = Math.random() * (innerWidth - radius * 2) + radius;
+        let y = Math.random() * (innerHeight - radius * 2) + radius;
+        let dx = (Math.random() - 0.5) * 3;
+        let dy = (Math.random() - 0.5) * 3;
+        circleArray.push(new Circle(x, y, dx, dy, radius));
+    }
+
 }
-
-
 
 function animate() {
     //calls itself to create a loop
@@ -143,4 +154,5 @@ function animate() {
     }
 
 };
-animate()
+animate();
+init();
